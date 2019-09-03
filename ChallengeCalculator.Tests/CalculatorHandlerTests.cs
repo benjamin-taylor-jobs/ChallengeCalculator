@@ -19,11 +19,7 @@ namespace ChallengeCalculator.Tests
             string[] args = null;
             string userInput = "";
             calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(
-                new CalculatorInput
-                {
-                    MaxNumbersAllowed = 2,
-                    Numbers = new List<int>() { }
-                }
+                new CalculatorInput { Numbers = new List<int>() { }}
             );
             programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>()).Returns(new ProgramArguments());
 
@@ -41,11 +37,7 @@ namespace ChallengeCalculator.Tests
             string[] args = null;
             string userInput = "";
             calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(
-                new CalculatorInput
-                {
-                    MaxNumbersAllowed = 2,
-                    Numbers = new List<int>() { 0 }
-                }
+                new CalculatorInput { Numbers = new List<int>() { 0 }}
             );
             programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>()).Returns(new ProgramArguments());
 
@@ -63,11 +55,7 @@ namespace ChallengeCalculator.Tests
             string[] args = null;
             string userInput = "";
             calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(
-                new CalculatorInput
-                {
-                    MaxNumbersAllowed = 2,
-                    Numbers = new List<int>() { 5000 }
-                }
+                new CalculatorInput {Numbers = new List<int>() { 5000 }}
             );
             programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>()).Returns(new ProgramArguments());
 
@@ -85,11 +73,7 @@ namespace ChallengeCalculator.Tests
             string[] args = null;
             string userInput = "";
             calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(
-                new CalculatorInput
-                {
-                    MaxNumbersAllowed = 2,
-                    Numbers = new List<int>() { 24,0 }
-                }
+                new CalculatorInput { Numbers = new List<int>() { 24,0 }}
             );
             programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>())
                 .Returns(new ProgramArguments {
@@ -102,26 +86,6 @@ namespace ChallengeCalculator.Tests
             Assert.IsTrue(calculatorResult.Total == 0);
             Assert.IsTrue(calculatorResult.Formula.Equals("0 = 0"));
             Assert.IsTrue(calculatorResult.ErrorMessage.ToUpper().Contains("CANNOT DIVIDE BY ZERO"));
-        }
-
-        [TestMethod]
-        public void Calculate_MaxNumbersAllowedExceeded_MaxNumbersAllowedExceeded()
-        {
-            string[] args = null;
-            string userInput = "";
-            const int MAX_NUMBERS_ALLOWED = 2;
-            calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(x =>
-            {
-                throw new MaxNumbersExceededException($"The Calculator Only Allows up to {MAX_NUMBERS_ALLOWED} Numbers at a Time");
-            });
-            programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>()).Returns(new ProgramArguments());
-
-            CalculatorHandler calculatorHandler = new CalculatorHandler(calculatorInputHandler, programArgumentsHandler);
-            CalculatorResult calculatorResult = calculatorHandler.Calculate(userInput, args);
-
-            Assert.IsTrue(calculatorResult.Total == 0);
-            Assert.IsTrue(calculatorResult.Formula.Equals("0 = 0"));
-            Assert.IsTrue(calculatorResult.ErrorMessage.ToUpper().Contains("THE CALCULATOR ONLY ALLOWS UP TO 2 NUMBERS AT A TIME"));
         }
 
         [TestMethod]

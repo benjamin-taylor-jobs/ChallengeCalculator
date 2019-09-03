@@ -8,7 +8,6 @@ namespace ChallengeCalculator
 {
     public class CalculatorInput
     {
-        public int MaxNumbersAllowed { get; set; } = 2;
         public List<int> Numbers { get; set; } = new List<int>();
     }
 }
