@@ -14,7 +14,7 @@ namespace ChallengeCalculator.Handlers
 
     public class CalculatorInputHandler : ICalculatorInputHandler
     {
-        readonly List<string> AcceptableDelimiters = new List<string>(){","};
+        readonly List<string> AcceptableDelimiters = new List<string>(){",", @"\n"};
 
         public CalculatorInputHandler() { }
 
@@ -27,6 +27,7 @@ namespace ChallengeCalculator.Handlers
         {
             CalculatorInput calculatorInput = new CalculatorInput() {};
 
+            //Split the string by all of the acceptable delimiters
             List<string> splitUserInput = userInput.Split(AcceptableDelimiters.ToArray(), StringSplitOptions.None).ToList();
 
             //Replace invalid entries with 0

@@ -11,7 +11,7 @@ namespace ChallengeCalculator.Tests
         [TestMethod]
         public void InterpretCalculatorInput_NoNumbers_SuccessfullyParsed()
         {
-            string userInput = "";
+            string userInput = @"";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
@@ -22,7 +22,7 @@ namespace ChallengeCalculator.Tests
         [TestMethod]
         public void InterpretCalculatorInput_OneValidNumberWithNoDelimiter_SuccessfullyParsed()
         {
-            string userInput = "5000";
+            string userInput = @"5000";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
@@ -33,7 +33,7 @@ namespace ChallengeCalculator.Tests
         [TestMethod]
         public void InterpretCalculatorInput_OneInvalidNumberWithNoDelimiter_SuccessfullyParsed()
         {
-            string userInput = "5t232ac;";
+            string userInput = @"5t232ac;";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
@@ -42,9 +42,9 @@ namespace ChallengeCalculator.Tests
         }
 
         [TestMethod]
-        public void InterpretCalculatorInput_TwoValidNumbersWithDelimiter_SuccessfullyParsed()
+        public void InterpretCalculatorInput_TwoValidNumbersWithCommaDelimiter_SuccessfullyParsed()
         {
-            string userInput = "1,20";
+            string userInput = @"1,20";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
@@ -54,9 +54,21 @@ namespace ChallengeCalculator.Tests
         }
 
         [TestMethod]
-        public void InterpretCalculatorInput_TwoInvalidNumbersWithDelimiter_SuccessfullyParsed()
+        public void InterpretCalculatorInput_TwoValidNumbersWithNewlineDelimiter_SuccessfullyParsed()
         {
-            string userInput = "1'2'f234tfava ,20 2f2323a2f";
+            string userInput = @"1\n20";
+
+            CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 1);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 20);
+        }
+
+        [TestMethod]
+        public void InterpretCalculatorInput_TwoInvalidNumbersWithCommaDelimiter_SuccessfullyParsed()
+        {
+            string userInput = @"1'2'f234tfava ,20 2f2323a2f";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
@@ -66,31 +78,54 @@ namespace ChallengeCalculator.Tests
         }
 
         [TestMethod]
-        public void InterpretCalculatorInput_MultipleInvalidNumbers_ReturnSuccessful()
+        public void InterpretCalculatorInput_TwoInvalidNumbersWithNewlineDelimiter_SuccessfullyParsed()
         {
-            string userInput = "1'2',f234tfava ,20 2f2323a2f";
+            string userInput = @"1'2'f234tfava \n20 2f2323a2f";
+
+            CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+        }
+
+        [TestMethod]
+        public void InterpretCalculatorInput_MultipleInvalidNumbersWithCommaDelimiter_ReturnSuccessful()
+        {
+            string userInput = @"1'2',f234tfava ,20 2f2323a2f";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
             Assert.IsTrue(calculatorInput.Numbers.Count == 3);
             Assert.IsTrue(calculatorInput.Numbers[0] == 0);
             Assert.IsTrue(calculatorInput.Numbers[1] == 0);
-            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[2] == 0);
         }
 
         [TestMethod]
-        public void InterpretCalculatorInput_MultipleValidNumbers_ReturnSuccessful()
+        public void InterpretCalculatorInput_MultipleInvalidNumbersWithNewlineDelimiter_ReturnSuccessful()
         {
-            string userInput = "243,-2,5,-4,9";
+            string userInput = @"1'2'\nf234tfava \n20 2f2323a2f";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
-            Assert.IsTrue(calculatorInput.Numbers.Count == 5);
-            Assert.IsTrue(calculatorInput.Numbers[0] == 243);
-            Assert.IsTrue(calculatorInput.Numbers[1] == -2);
-            Assert.IsTrue(calculatorInput.Numbers[2] == 5);
-            Assert.IsTrue(calculatorInput.Numbers[3] == -4);
-            Assert.IsTrue(calculatorInput.Numbers[4] == 9);
+            Assert.IsTrue(calculatorInput.Numbers.Count == 3);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[2] == 0);
+        }
+
+        [TestMethod]
+        public void InterpretCalculatorInput_MultipleValidNumbersWithCommanAndNewlineDelimiters_ReturnSuccessful()
+        {
+            string userInput = @"1\n2,3";
+
+            CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInput.Numbers.Count == 3);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 1);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 2);
+            Assert.IsTrue(calculatorInput.Numbers[2] == 3);
         }
     }
 }
