@@ -61,24 +61,34 @@ namespace ChallengeCalculator.Handlers
         /// <returns>string with the delimiter formatting removed</returns>
         private string InterpretCustomDelimiters(string userInput)
         {
+            const string SEPARATOR = @"\n";
+            string delimitedValues = userInput;
+
             //This regular expression will tell us if they are trying to supply a single char delimiter
-            Match delimiterFormatMatch = Regex.Match(userInput, @"^\/\/.\\n.*$");
+            Match delimiterFormatMatch = Regex.Match(userInput, @"^\/\/(.|(\[[^\[\]]+\]))\\n.*$");
             if (delimiterFormatMatch.Success)
             {
+                //Separate out the delimiter definitions from the rest of the string where the values are at
+                int indexOfFirstNewline = userInput.IndexOf(SEPARATOR);
+                string delimiterDefinitions = userInput.Substring(0, indexOfFirstNewline + SEPARATOR.Length);
+                delimitedValues = userInput.Substring(delimiterDefinitions.Length, userInput.Length - delimiterDefinitions.Length);
+
                 //Remove the first two forward slashes
-                userInput = userInput.Remove(0, 2);
+                delimiterDefinitions = delimiterDefinitions.Remove(0, 2);
 
-                //Get our single character delimiter and add it to our delimiter list
-                AddNewDelimiter(userInput.First().ToString());
-
-                //Remove the single character delimiter
-                userInput = userInput.Remove(0, 1);
-
-                //Remove the endline (\n)
-                userInput = userInput.Remove(0, 2);
+                //If we don't have a single char match, then we know we have a multi-char match
+                Match singleCharDelimiterMatch = Regex.Match(delimiterDefinitions, @"^.\\n$");
+                if (singleCharDelimiterMatch.Success)
+                    AddNewDelimiter(delimiterDefinitions.First().ToString());
+                else
+                {
+                    //Get our multi-character delimiter match (we know we only have 1 based on the regular expression at the beginning)
+                    Match multiCharDelimiterMatch = Regex.Match(delimiterDefinitions, @"^(\[[^\[\]]+\])");
+                    AddNewDelimiter(multiCharDelimiterMatch.Value.Replace("[", "").Replace("]", ""));
+                }
             }
 
-            return userInput;
+            return delimitedValues;
         }
         private void AddNewDelimiter(string delimiter)
         {

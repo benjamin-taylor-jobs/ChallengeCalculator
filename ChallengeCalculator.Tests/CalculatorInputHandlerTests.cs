@@ -217,5 +217,51 @@ namespace ChallengeCalculator.Tests
             Assert.IsTrue(calculatorInput.Numbers[0] == 0);
             Assert.IsTrue(calculatorInput.Numbers[1] == 0);
         }
+
+        [TestMethod]
+        public void InterpretCustomDelimiters_SingleMultiCharacterDelimiterProvided_ReturnSuccessful()
+        {
+            string userInput = @"//[***]\n11***22***33";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Count == 3);
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Contains("***"));
+            Assert.IsTrue(calculatorInput.Numbers.Count == 3);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 11);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 22);
+            Assert.IsTrue(calculatorInput.Numbers[2] == 33);
+        }
+
+        [TestMethod]
+        public void InterpretCustomDelimiters_MultipleMultiCharacterDelimitersProvided_TreatedLikeNoDelimitersProvided()
+        {
+            string userInput = @"//[***][26]\n11***22***33";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Count == 2);
+            Assert.IsTrue(!calculatorInputHandler.AcceptableDelimiters.Contains("***"));
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+        }
+
+        [TestMethod]
+        public void InterpretCustomDelimiters_ComboSingleMultiCharacterDelimitersProvided_TreatedLikeNoDelimitersProvided()
+        {
+            string userInput = @"//;[***][26]\n11***22***33";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Count == 2);
+            Assert.IsTrue(!calculatorInputHandler.AcceptableDelimiters.Contains("***"));
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+        }
     }
 }
