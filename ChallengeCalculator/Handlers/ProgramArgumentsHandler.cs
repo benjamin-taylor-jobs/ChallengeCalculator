@@ -19,13 +19,17 @@ namespace ChallengeCalculator.Handlers
     {
         public ProgramArguments InterpretProgramArguments(string[] args)
         {
-            return new ProgramArguments
-            {
-                CalculatorType = args.Length > 0 && Enum.IsDefined(typeof(Calculator.CalculatorTypes), args[0]) ? (Calculator.CalculatorTypes)Enum.Parse(typeof(Calculator.CalculatorTypes), args[0], true) : Calculator.CalculatorTypes.Addition,
-                AlternateDelimiter = args.Length > 1 ? args[1] : "",
-                AllowNegativeNumbers = args.Length > 2 && bool.TryParse(args[2], out bool allowNegativeNumbers) ? allowNegativeNumbers : true,
-                UpperBound = args.Length > 3 && int.TryParse(args[3], out int upperBound) ? upperBound : 0
-            };
+            ProgramArguments programArguments = new ProgramArguments();
+            if (args.Length > 0 && Enum.IsDefined(typeof(Calculator.CalculatorTypes), args[0]))
+                programArguments.CalculatorType = (Calculator.CalculatorTypes)Enum.Parse(typeof(Calculator.CalculatorTypes), args[0], true);
+            if (args.Length > 1)
+                programArguments.AlternateDelimiter = args[1];
+            if (args.Length > 2 && bool.TryParse(args[2], out bool allowNegativeNumbers))
+                programArguments.AllowNegativeNumbers = allowNegativeNumbers;
+            if (args.Length > 3 && int.TryParse(args[3], out int upperBound))
+                programArguments.UpperBound = upperBound;
+
+            return programArguments;
         }
     }
 }

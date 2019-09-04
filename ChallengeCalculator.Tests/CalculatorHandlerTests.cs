@@ -106,5 +106,24 @@ namespace ChallengeCalculator.Tests
             Assert.IsTrue(calculatorResult.Formula.Equals("0 = 0"));
             Assert.IsTrue(calculatorResult.ErrorMessage.ToUpper().Contains("ENCOUNTERED AN ERROR ATTEMPTING TO INTEPRET THE CALCULATOR INPUT"));
         }
+
+        [TestMethod]
+        public void Calculate_CalculatorNegativeNumbersDisallowed_NegativeNumberException()
+        {
+            string[] args = null;
+            string userInput = "";
+            programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>())
+                .Returns(new ProgramArguments { CalculatorType = Calculator.CalculatorTypes.Addition, AllowNegativeNumbers = false });
+            calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(
+                new CalculatorInput { Numbers = new List<int>() { 24, -5, -3 } }
+            );
+
+            CalculatorHandler calculatorHandler = new CalculatorHandler(calculatorInputHandler, programArgumentsHandler);
+            CalculatorResult calculatorResult = calculatorHandler.Calculate(userInput, args);
+
+            Assert.IsTrue(calculatorResult.Total == 0);
+            Assert.IsTrue(calculatorResult.Formula.Equals("0 = 0"));
+            Assert.IsTrue(calculatorResult.ErrorMessage.ToUpper().Contains("NEGATIVE NUMBERS ARE NOT ALLOWED: -5,-3"));
+        }
     }
 }
