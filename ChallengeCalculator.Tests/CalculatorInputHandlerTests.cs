@@ -172,5 +172,50 @@ namespace ChallengeCalculator.Tests
             Assert.IsTrue(calculatorInput.Numbers[1] == 1001);
             Assert.IsTrue(calculatorInput.Numbers[2] == 6);
         }
+
+        [TestMethod]
+        public void InterpretCustomDelimiters_SingleCharacterDelimiterNotProvided_ReturnSuccessful()
+        {
+            string userInput = @"//\n2;5";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Count == 2);
+            Assert.IsTrue(!calculatorInputHandler.AcceptableDelimiters.Contains(";"));
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+        }
+
+        [TestMethod]
+        public void InterpretCustomDelimiters_SingleCharacterDelimiterProvided_ReturnSuccessful()
+        {
+            string userInput = @"//;\n2;5";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Count == 3);
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Contains(";"));
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 2);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 5);
+        }
+
+        [TestMethod]
+        public void InterpretCustomDelimiters_MoreThanSingleCharacterDelimiterProvided_ReturnSuccessful()
+        {
+            string userInput = @"//;;\n2;5";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInputHandler.AcceptableDelimiters.Count == 2);
+            Assert.IsTrue(!calculatorInputHandler.AcceptableDelimiters.Contains(";"));
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 0);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 0);
+        }
     }
 }
