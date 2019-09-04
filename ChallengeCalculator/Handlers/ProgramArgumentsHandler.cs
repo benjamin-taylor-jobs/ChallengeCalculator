@@ -27,7 +27,10 @@ namespace ChallengeCalculator.Handlers
             if (args.Length > 2 && bool.TryParse(args[2], out bool allowNegativeNumbers))
                 programArguments.AllowNegativeNumbers = allowNegativeNumbers;
             if (args.Length > 3 && int.TryParse(args[3], out int upperBound))
+            {
+                programArguments.UpperBoundExists = true;
                 programArguments.UpperBound = upperBound;
+            }
 
             return programArguments;
         }

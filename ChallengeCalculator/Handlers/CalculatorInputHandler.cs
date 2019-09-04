@@ -9,6 +9,7 @@ namespace ChallengeCalculator.Handlers
 {
     public interface ICalculatorInputHandler
     {
+        int UpperBound { get; set; }
         CalculatorInput InterpretCalculatorInput(string userInput);
         void ReplaceAlternativeDelimiterWithArgumentDelimiter(string delimiter);
     }
@@ -16,6 +17,8 @@ namespace ChallengeCalculator.Handlers
     public class CalculatorInputHandler : ICalculatorInputHandler
     {
         readonly List<string> AcceptableDelimiters = new List<string>(){",", @"\n"};
+
+        public int UpperBound { get; set; } = 1000;
 
         public CalculatorInputHandler() { }
 
@@ -32,7 +35,7 @@ namespace ChallengeCalculator.Handlers
             List<string> splitUserInput = userInput.Split(AcceptableDelimiters.ToArray(), StringSplitOptions.None).ToList();
 
             //Replace invalid entries with 0
-            calculatorInput.Numbers = splitUserInput.Select(x => int.TryParse(x, out int num) ? num : 0).ToList();
+            calculatorInput.Numbers = splitUserInput.Select(x => int.TryParse(x, out int num) ? num : 0).Where(x => x <= UpperBound).ToList();
 
             return calculatorInput;
         }

@@ -36,6 +36,8 @@ namespace ChallengeCalculator.Handlers
                 ProgramArguments programArguments = programArgumentsHandler.InterpretProgramArguments(args);
                 if (programArguments.AlternateDelimiter.Length > 0)
                     calculatorInputHandler.ReplaceAlternativeDelimiterWithArgumentDelimiter(programArguments.AlternateDelimiter);
+                if (programArguments.UpperBoundExists)
+                    calculatorInputHandler.UpperBound = programArguments.UpperBound;
                 CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
                 if (!programArguments.AllowNegativeNumbers && calculatorInput.Numbers.Any(x => x < 0))
                     throw new NegativeNumberException("Negative numbers are not allowed: " + string.Join(",", calculatorInput.Numbers.Where(x => x < 0)));

@@ -12,6 +12,7 @@ namespace ChallengeCalculator.Models
         public Calculator.CalculatorTypes CalculatorType { get; set; } = Calculator.CalculatorTypes.Addition;
         public string AlternateDelimiter { get; set; } = "";
         public bool AllowNegativeNumbers { get; set; } = false;
+        public bool UpperBoundExists { get; set; } = false;
         public int UpperBound { get; set; } = 0;
     }
 }

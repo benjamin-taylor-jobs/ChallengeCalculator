@@ -68,6 +68,24 @@ namespace ChallengeCalculator.Tests
         }
 
         [TestMethod]
+        public void Calculate_MultipleNumbers_SuccessfulResult()
+        {
+            string[] args = null;
+            string userInput = "";
+            calculatorInputHandler.InterpretCalculatorInput(Arg.Any<string>()).Returns(
+                new CalculatorInput { Numbers = new List<int>() { 500, 2, 3 } }
+            );
+            programArgumentsHandler.InterpretProgramArguments(Arg.Any<string[]>()).Returns(new ProgramArguments());
+
+            CalculatorHandler calculatorHandler = new CalculatorHandler(calculatorInputHandler, programArgumentsHandler);
+            CalculatorResult calculatorResult = calculatorHandler.Calculate(userInput, args);
+
+            Assert.IsTrue(calculatorResult.Total == 505);
+            Assert.IsTrue(calculatorResult.Formula.Equals("500+2+3 = 505"));
+            Assert.IsTrue(calculatorResult.ErrorMessage.Length == 0);
+        }
+
+        [TestMethod]
         public void Calculate_MoreThanOneNumberZeroDivision_CannotDivideByZero()
         {
             string[] args = null;

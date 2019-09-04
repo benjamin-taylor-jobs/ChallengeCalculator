@@ -22,12 +22,12 @@ namespace ChallengeCalculator.Tests
         [TestMethod]
         public void InterpretCalculatorInput_OneValidNumberWithNoDelimiter_SuccessfullyParsed()
         {
-            string userInput = @"5000";
+            string userInput = @"500";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
 
             Assert.IsTrue(calculatorInput.Numbers.Count == 1);
-            Assert.IsTrue(calculatorInput.Numbers[0] == 5000);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 500);
         }
 
         [TestMethod]
@@ -141,6 +141,36 @@ namespace ChallengeCalculator.Tests
             Assert.IsTrue(calculatorInput.Numbers[0] == 1);
             Assert.IsTrue(calculatorInput.Numbers[1] == 2);
             Assert.IsTrue(calculatorInput.Numbers[2] == 3);
+        }
+
+        [TestMethod]
+        public void InterpretCalculatorInput_NumbersOver1000Excluded_ReturnSuccessful()
+        {
+            string userInput = @"2,1001,6";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            calculatorInputHandler.ReplaceAlternativeDelimiterWithArgumentDelimiter("|");
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInput.Numbers.Count == 2);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 2);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 6);
+        }
+
+        [TestMethod]
+        public void InterpretCalculatorInput_ArgumentProvidedUpperBoundExcluded_ReturnSuccessful()
+        {
+            const int UPPER_BOUND = 2000;
+            string userInput = @"2,1001,2001,6";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            calculatorInputHandler.UpperBound = UPPER_BOUND;
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInput.Numbers.Count == 3);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 2);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 1001);
+            Assert.IsTrue(calculatorInput.Numbers[2] == 6);
         }
     }
 }
