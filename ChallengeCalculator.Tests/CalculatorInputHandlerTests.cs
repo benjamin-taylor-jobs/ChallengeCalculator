@@ -116,11 +116,26 @@ namespace ChallengeCalculator.Tests
         }
 
         [TestMethod]
-        public void InterpretCalculatorInput_MultipleValidNumbersWithCommanAndNewlineDelimiters_ReturnSuccessful()
+        public void InterpretCalculatorInput_MultipleValidNumbersWithCommaAndNewlineDelimiters_ReturnSuccessful()
         {
             string userInput = @"1\n2,3";
 
             CalculatorInput calculatorInput = new CalculatorInputHandler().InterpretCalculatorInput(userInput);
+
+            Assert.IsTrue(calculatorInput.Numbers.Count == 3);
+            Assert.IsTrue(calculatorInput.Numbers[0] == 1);
+            Assert.IsTrue(calculatorInput.Numbers[1] == 2);
+            Assert.IsTrue(calculatorInput.Numbers[2] == 3);
+        }
+
+        [TestMethod]
+        public void InterpretCalculatorInput_MultipleValidNumbersWithCommaAndArgumentDelimiters_ReturnSuccessful()
+        {
+            string userInput = @"1|2,3";
+
+            CalculatorInputHandler calculatorInputHandler = new CalculatorInputHandler();
+            calculatorInputHandler.ReplaceAlternativeDelimiterWithArgumentDelimiter("|");
+            CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
 
             Assert.IsTrue(calculatorInput.Numbers.Count == 3);
             Assert.IsTrue(calculatorInput.Numbers[0] == 1);

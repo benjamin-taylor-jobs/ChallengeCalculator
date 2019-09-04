@@ -33,8 +33,10 @@ namespace ChallengeCalculator.Handlers
 
             try
             {
-                CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
                 ProgramArguments programArguments = programArgumentsHandler.InterpretProgramArguments(args);
+                if (programArguments.AlternateDelimiter.Length > 0)
+                    calculatorInputHandler.ReplaceAlternativeDelimiterWithArgumentDelimiter(programArguments.AlternateDelimiter);
+                CalculatorInput calculatorInput = calculatorInputHandler.InterpretCalculatorInput(userInput);
 
                 try
                 {

@@ -10,6 +10,7 @@ namespace ChallengeCalculator.Handlers
     public interface ICalculatorInputHandler
     {
         CalculatorInput InterpretCalculatorInput(string userInput);
+        void ReplaceAlternativeDelimiterWithArgumentDelimiter(string delimiter);
     }
 
     public class CalculatorInputHandler : ICalculatorInputHandler
@@ -34,6 +35,14 @@ namespace ChallengeCalculator.Handlers
             calculatorInput.Numbers = splitUserInput.Select(x => int.TryParse(x, out int num) ? num : 0).ToList();
 
             return calculatorInput;
+        }
+
+        public void ReplaceAlternativeDelimiterWithArgumentDelimiter(string delimiter)
+        {
+            if (AcceptableDelimiters.Contains(@"\n"))
+                AcceptableDelimiters.Remove(@"\n");
+            if (!AcceptableDelimiters.Contains(delimiter))
+                AcceptableDelimiters.Add(delimiter);
         }
     }
 }
